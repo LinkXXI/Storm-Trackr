@@ -9,22 +9,25 @@ if (updateDiff === null) {
     updateDiff = 30;
     localStorage.setItem("updateDiff", 30);
 }
-window.nextUpdate = function (currentDateTime, minutes){
+if(nextUpdate === null){
+    localStorage.setItem("nextUpdate", getNextUpdate(new Date(), 1));
+}
+function getNextUpdate (currentDateTime, minutes){
     return  new Date(currentDateTime.getTime() + minutes*60000)
 }
 function setUpdateDates() {
     var date = new Date();
     localStorage.setItem("lastUpdate", date);
-    var nextDate = nextUpdate(date, updateDiff);
+    var nextDate = getNextUpdate(date, updateDiff);
     localStorage.setItem("nextUpdate", nextDate);
 }
 function stormLoad(data) {
-    window.storms = data;
-    localStorage.setItem("storms", JSON.stringify(data));
+    window.storms = data.storms.storm;
+    localStorage.setItem("storms", JSON.stringify(storms));
 }
 function trackLoad(data){
-    window.tracks=data;
-    localStorage.setItem("tracks", JSON.stringify(data));
+    window.tracks=data.tracks.storm;
+    localStorage.setItem("tracks", JSON.stringify(tracks));
 }
 function loadData(){
     $.ajax({
@@ -47,7 +50,7 @@ function checkData() {
     if (lastUpdate === null) {
         loadData();
         setUpdateDates();
-    } else if (new Date() > nextUpdate) {
+    } else if (new Date() > new Date(nextUpdate)) {
         loadData();
         setUpdateDates();
     } else if(typeof tracks === "undefined" || typeof storms === "undefined"){

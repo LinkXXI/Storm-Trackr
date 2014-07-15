@@ -48,7 +48,26 @@
                 <li><a href="">Tracks</a></li>
             </ul>
         </div>
+        <div data-role="content">
+            <ul data-role="listview" id="stormsByYearList" data-autodividers="true">
+
+            </ul>
+        </div>
     </div>
 </div>
+<script>
+    $(document).on('pagecreate', '#stormsByYear', function(){
+        var stormList = $("#stormsByYearList").listview({
+            autodividers:"true",
+            autodividersSelector: function(li){
+                return li.attr("data-year");
+            }
+        });
+        storms.forEach(function (storm){
+            $(stormList).append("<li data-year='" + new Date(storm.start).getFullYear() + "'>"+ storm.name + "</li>");
+        });
+        $(stormList).listview('refresh');
+    });
+</script>
 </body>
 </html>
