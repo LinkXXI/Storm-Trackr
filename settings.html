@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-    <script type="text/javascript" src="dataLoader.js"></script>
+    <script type="text/javascript" src="js/dataLoader.js"></script>
 </head>
 <body>
 <script>checkData();</script>
@@ -49,16 +49,6 @@
             updateTimeSetting.slider("refresh");
 
         });
-        $(document).on("pagebeforehide", "#settingsMain", function (event) {
-            if(isDirty) {
-                if (confirm("You are about to leave the page, this will cancel all changes made.\nAre you sure you want to leave?")) {
-
-                } else {
-                    event.preventDefault();
-                }
-            }
-        });
-
     </script>
 </div>
 </body>
