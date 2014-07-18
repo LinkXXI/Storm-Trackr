@@ -37,29 +37,32 @@ function trackLoad(data) {
 function loadData() {
     $.ajax({
         method: "GET",
-        url: "storms.json",
+        url: "json/storms.json",
         dataType: "json",
-        error: function () {
-            alert("An Error has occured");
+        error: function (jqxhr, textStatus, errorThrown) {
+            alert("An Error has occurred :" + textStatus +"\n" + errorThrown);
         },
         success: stormLoad
     });
     $.ajax({
         method: "GET",
-        url: "tracks.json",
+        url: "json/tracks.json",
         dataType: "json",
-        error: function () {
-            alert("An Error has occured");
+        error: function (jqxhr, textStatus, errorThrown) {
+            alert("An Error has occurred :" + textStatus +"\n" + errorThrown);
         },
         success: trackLoad
     });
 }
 
-function checkData() {
+function checkData(forceLoad) {
     if (lastUpdate === null) {
         loadData();
         setUpdateDates();
     } else if (new Date() > new Date(nextUpdate)) {
+        loadData();
+        setUpdateDates();
+    } else if(forceLoad){
         loadData();
         setUpdateDates();
     } else if (typeof tracks === "undefined" || typeof storms === "undefined") {

@@ -3,41 +3,111 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Tracks</title>
+    <meta name="viewport" id="viewport"
+          content="width=device-width, height=device-height,
+  initial-scale=1.0, maximum-scale=1.0,
+  user-scalable=no;" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDez5ZF6K_UOr8izzd4PkXyWpAzG1dwTJQ"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
+    <style>
+        #mapPage{
+            height: 0;
+        }
+        #hurricaneMap {
+            height: 100%;
+            padding: 0;
+            text-shadow: none;
+        }
+    </style>
 </head>
 <body>
-    <script>checkData()</script>
-    <div data-role="page" id="tracksMain">
+<script>
+    checkData()
+    $(document).on("pagecreate", "#tracksMain", function () {
+        var tracksList = $("#tracksList");
+        var append = "";
+        $.each(tracks, function (i, track) {
+            append += "<li><a href='#mapPage' data-id='" + i + "'>" + track.name + "</a></li>";
+        })
+        $(tracksList).append(append);
+        tracksList.listview("refresh");
+    });
+</script>
+<div data-role="page" id="tracksMain">
+    <div data-role="header">
         <div data-role="header">
-            <div data-role="header">
-                <a href="#" data-icon="back" data-rel="back">Back</a>
+            <a href="#" data-icon="back" data-rel="back">Back</a>
 
-                <h1>Tracks</h1>
-                <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
-            </div>
-            <div data-role="navbar">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a href="reports.html" >Reports</a>
-                    </li>
-                    <li>
-                        <a href="charts.html">Charts</a>
-                    </li>
-                    <li>
-                        <a href="#tracksMain" class="ui-btn-active ui-state-persist">Tracks</a>
-                    </li>
-                </ul>
-            </div>
+            <h1>Tracks</h1>
+            <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
         </div>
-        <div data-role="content">
-
+        <div data-role="navbar">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="reports.html">Reports</a>
+                </li>
+                <li>
+                    <a href="charts.html">Charts</a>
+                </li>
+                <li>
+                    <a href="#tracksMain" class="ui-btn-active ui-state-persist">Tracks</a>
+                </li>
+            </ul>
         </div>
     </div>
+    <div data-role="content">
+        <ul data-role="listview" id="tracksList">
+
+        </ul>
+    </div>
+</div>
+<div data-role="page" id="mapPage">
+    <div data-role="header">
+        <div data-role="header">
+            <a href="#" data-icon="back" data-rel="back">Back</a>
+
+            <h1>Track for Hurricane<span id="nameTarget"></span></h1>
+            <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
+        </div>
+        <div data-role="navbar">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="reports.html">Reports</a>
+                </li>
+                <li>
+                    <a href="charts.html">Charts</a>
+                </li>
+                <li>
+                    <a href="#tracksMain" class="ui-btn-active ui-state-persist">Tracks</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content" id="hurricaneMap" style="height:100%;">
+
+    </div>
+    <div data-role="footer">
+        <p>Maps provided by <a href="http://maps.google.com">Google</a></p>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function (){
+        var mapOptions = {
+            center: new google.maps.LatLng(30, -67),
+            zoom : 4
+        }
+        window.map = new google.maps.Map(document.getElementById("hurricaneMap"),mapOptions);
+    });
+</script>
 </body>
 </html>
