@@ -4,88 +4,62 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Reports</title>
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="dataLoader.js"></script>
 </head>
 
 <body>
-    <div data-role="page" id="main" data-add-back-btn="true">
-        <script>
-            checkData()
-        </script>
-        <div data-role="header">
-            <a href="#" data-icon="back" data-rel="back">Back</a>
+<div data-role="page" id="main" data-add-back-btn="true">
+    <script>
+        checkData()
+    </script>
+    <div data-role="header">
+        <a href="#" data-icon="back" data-rel="back">Back</a>
 
-            <h1>Storm Reports</h1>
-            <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
+        <h1>Storm Reports</h1>
+        <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
 
-            <div data-role="navbar">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
-                    </li>
-                    <li>
-                        <a href="">Charts</a>
-                    </li>
-                    <li>
-                        <a href="">Tracks</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div data-role="content">
-            <ul data-role="listview">
+        <div data-role="navbar">
+            <ul>
                 <li>
-                    <a href="#stormsByYear">Storms by Year</a>
+                    <a href="index.html">Home</a>
                 </li>
                 <li>
-                    <a href="#stormsByCategory">Storms by Category</a>
+                    <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
                 </li>
                 <li>
-                    <a href="#">Report 3</a>
+                    <a href="">Charts</a>
+                </li>
+                <li>
+                    <a href="">Tracks</a>
                 </li>
             </ul>
         </div>
     </div>
-
-    <div data-role="page" id="stormsByYear" data-add-back-btn="true">
-        <div data-role="header">
-            <a href="#" data-icon="back" data-rel="back">Back</a>
-            <h1>Storms by Year</h1>
-            <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
-            <div data-role="navbar">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li>
-                        <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
-                    </li>
-                    <li>
-                        <a href="">Charts</a>
-                    </li>
-                    <li>
-                        <a href="">Tracks</a>
-                    </li>
-                </ul>
-            </div>
-            <div data-role="content">
-                <ul data-role="listview" id="stormsByYearList" data-autodividers="true">
-
-                </ul>
-            </div>
-        </div>
+    <div data-role="content">
+        <ul data-role="listview">
+            <li>
+                <a href="#stormsByYear">Storms by Year</a>
+            </li>
+            <li>
+                <a href="#stormsByCategory">Storms by Category</a>
+            </li>
+            <li>
+                <a href="#">Report 3</a>
+            </li>
+        </ul>
     </div>
+</div>
 
-    <div data-role="page" id="stormsByCategory" data-add-back-btn="true">
+<div data-role="page" id="stormsByYear" data-add-back-btn="true">
+    <div data-role="header">
         <a href="#" data-icon="back" data-rel="back">Back</a>
-        <h1>Storms by Category</h1>
+
+        <h1>Storms by Year</h1>
         <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
+
         <div data-role="navbar">
             <ul>
                 <li>
@@ -103,37 +77,68 @@
             </ul>
         </div>
         <div data-role="content">
-            <ul data-role="listview" id="stormsByCategoryList" data-autodividers="true">
+            <ul data-role="listview" id="stormsByYearList" data-autodividers="true">
 
             </ul>
         </div>
-        <script>
-            $(document).on('pagecreate', '#stormsByYear', function(){
-                var stormList = $("#stormsByYearList").listview({
-                    autodividers:"true",
-                    autodividersSelector: function(li){
-                        return li.attr("data-year");
-                    }
-                });
-                storms.forEach(function (storm){
-                    $(stormList).append("<li data-year='" + new Date(storm.start).getFullYear() + "'>"+ storm.name + "</li>");
-                });
-                $(stormList).listview('refresh');
-            });
-            
-            $(document).on('pagecreate', '#stormsByCategory', function(){
-                var stormList = $("#stormsByCategoryList").listview({
-                    autodividers:"true",
-                    autodividersSelector: function(li){
-                        return li.attr("data-category");
-                    }
-                });
-                storms.forEach(function (storm){
-                    $(stormList).append("<li data-category='" + storm.category + "'>"+ storm.name + "</li>");
-                });
-                $(stormList).listview('refresh');
-            });
-        </script>
+    </div>
+</div>
+
+<div data-role="page" id="stormsByCategory" data-add-back-btn="true">
+    <a href="#" data-icon="back" data-rel="back">Back</a>
+
+    <h1>Storms by Category</h1>
+    <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
+
+    <div data-role="navbar">
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
+            </li>
+            <li>
+                <a href="">Charts</a>
+            </li>
+            <li>
+                <a href="">Tracks</a>
+            </li>
+        </ul>
+    </div>
+    <div data-role="content">
+        <ul data-role="listview" id="stormsByCategoryList" data-autodividers="true">
+
+        </ul>
+    </div>
+</div>
+<script>
+    $(document).on('pagecreate', '#stormsByYear', function () {
+        var stormList = $("#stormsByYearList").listview({
+            autodividers: "true",
+            autodividersSelector: function (li) {
+                return li.attr("data-year");
+            }
+        });
+        storms.forEach(function (storm) {
+            $(stormList).append("<li data-year='" + new Date(storm.start).getFullYear() + "'>" + storm.name + "</li>");
+        });
+        $(stormList).listview('refresh');
+    });
+
+    $(document).on('pagecreate', '#stormsByCategory', function () {
+        var stormList = $("#stormsByCategoryList").listview({
+            autodividers: "true",
+            autodividersSelector: function (li) {
+                return li.attr("data-category");
+            }
+        });
+        storms.forEach(function (storm) {
+            $(stormList).append("<li data-category='" + storm.category + "'>" + storm.name + "</li>");
+        });
+        $(stormList).listview('refresh');
+    });
+</script>
 </body>
 
 </html>

@@ -1,10 +1,5 @@
 <component name="libraryTable">
   <library name="hashLib" type="javaScript">
-    <properties>
-      <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/hashLib.js" />
-      </sourceFilesUrls>
-    </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/hashLib.js" />
     </CLASSES>
