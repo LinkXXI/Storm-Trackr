@@ -6,7 +6,7 @@
     <meta name="viewport" id="viewport"
           content="width=device-width, height=device-height,
   initial-scale=1.0, maximum-scale=1.0,
-  user-scalable=no;" />
+  user-scalable=no" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
@@ -26,7 +26,7 @@
 <body>
 <script>
     checkData()
-    $(document).on("pagecreate", "#tracksMain", function () {
+    $(document).on("pageinit", "#tracksMain", function () {
         var tracksList = $("#tracksList");
         var append = "";
         $.each(tracks, function (i, track) {
@@ -102,12 +102,19 @@
 
 <script>
     $(document).ready(function (){
-        var mapOptions = {
-            center: new google.maps.LatLng(30, -67),
-            zoom : 4
-        }
-        window.map = new google.maps.Map(document.getElementById("hurricaneMap"),mapOptions);
+
     });
+    $(document).on("pageinit", "#mapPage", function(){
+        console.log(typeof map === 'undefined')
+        if(typeof map === 'undefined'){
+            var mapOptions = {
+                center: new google.maps.LatLng(30, -67),
+                zoom : 4
+            }
+            window.map = new google.maps.Map(document.getElementById("hurricaneMap"),mapOptions);
+        }
+    });
+
 </script>
 </body>
 </html>

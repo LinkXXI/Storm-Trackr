@@ -56,6 +56,7 @@ function loadData() {
 }
 
 function checkData(forceLoad) {
+    console.log("checkData() called");
     if (lastUpdate === null) {
         loadData();
         setUpdateDates();
