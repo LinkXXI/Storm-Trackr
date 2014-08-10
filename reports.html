@@ -7,12 +7,12 @@
     <meta name="viewport" id="viewport"
           content="width=device-width, height=device-height,
   initial-scale=1.0, maximum-scale=1.0,
-  user-scalable=no" />
+  user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
-    <link rel="stylesheet" href="css/stlyes.css" />
+    <link rel="stylesheet" href="css/stlyes.css"/>
 </head>
 <body>
 <div data-role="page" id="main">
@@ -82,7 +82,7 @@
             </ul>
         </div>
         <div data-role="content">
-            <ul data-role="listview" id="stormsByYearList" data-autodividers="true">
+            <ul data-role="listview" id="stormsByYearList">
 
             </ul>
         </div>
@@ -118,18 +118,89 @@
         </ul>
     </div>
 </div>
+
+<div data-role="page" id="stormDetails">
+    <div data-role="header">
+        <a href="#" data-icon="back" data-rel="back">Back</a>
+
+        <h1>Storm Details</h1>
+        <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
+    </div>
+    <div data-role="navbar">
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>
+                <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
+            </li>
+            <li>
+                <a href="charts.html" data-ajax="false">Charts</a>
+            </li>
+            <li>
+                <a href="tracks.html" data-ajax="false">Tracks</a>
+            </li>
+        </ul>
+    </div>
+    <div data-role="content">
+
+    </div>
+</div>
+
 <script>
     $(document).on('pagecreate', '#stormsByYear', function () {
-        var stormList = $("#stormsByYearList").listview({
-            autodividers: "true",
-            autodividersSelector: function (li) {
-                return li.attr("data-year");
+        /* var stormList = $("#stormsByYearList").listview({
+         autodividers: "true",
+         autodividersSelector: function (li) {
+         return li.attr("data-year");
+         }
+         });
+         var listString = "";
+         storms.forEach(function (storm) {
+         //$(stormList).append("<li data-year='" + new Date(storm.start).getFullYear() + "'>" + storm.name + "</li>");
+         listString += "<li data-year='" + new Date(storm.start).getFullYear() + "'>" + storm.name + "</li>"
+         });
+         $(stormList).listview('refresh');*/
+        var listString = "";
+        var stormsYearsArray = [];
+        for (var storm in storms) {
+            //get the storms year
+            var stormYear = storms[storm].start.split("/")[0];
+            //check if the ley exists
+            if (stormsYearsArray[stormYear] == undefined) {
+                stormsYearsArray[stormYear] = [];
             }
+            //put the origional index into the storm object for future usage
+            storms[storm].origIndex = storm;
+            // add storm to array
+            stormsYearsArray[stormYear].push(storms[storm]);
+        }
+        //loop through storm years
+        for (var key in stormsYearsArray) {
+            var yearsStorms = stormsYearsArray[key];
+            var speed = 0;
+            var strongestStorm = "";
+            //find the strongest storm
+            for (storm in yearsStorms) {
+                var aStorm = yearsStorms[storm]
+                if (aStorm.maxKM > speed) {
+                    speed = aStorm.maxKM;
+                    strongestStorm = aStorm.name;
+                }
+            }
+            //add header
+            listString += "<li data-role='list-divider'>Year: " + key + "<br />Strongest Storm: " + strongestStorm + "<br />Storm Windspeed (kmph): " + speed + "</li>";
+            //add all the other storms.
+            for (storm in yearsStorms) {
+                var aStorm = yearsStorms[storm];
+                listString += "<li><a href='' data-index='" + aStorm.origIndex + "'>" + aStorm.name + "</a></li>"
+            }
+        }
+        $("#stormsByYearList").append(listString).listview("refresh");
+        $(this).on('vclick', 'ul li a', function () {
+            window.stormDetails = storms[$(this).attr('data-index')];
+            $.mobile.changePage("#stormDetails");
         });
-        storms.forEach(function (storm) {
-            $(stormList).append("<li data-year='" + new Date(storm.start).getFullYear() + "'>" + storm.name + "</li>");
-        });
-        $(stormList).listview('refresh');
     });
 
     $(document).on('pagecreate', '#stormsByCategory', function () {
@@ -144,6 +215,27 @@
             $(stormList).append("<li data-category='" + storm.category + "'>" + storm.name + "</li>");
         });
         $(stormList).listview('refresh');
+    });
+
+    $(document).on('pagebeforeshow', '#stormDetails', function () {
+        var content = $(this).find("[data-role='content']").html("");
+        $(content).append(
+            "<h1>" + stormDetails.name + "</h1>"
+            + "<Table>"
+            + "<tr><td>Start date</td><td>" + stormDetails.start + "</td></tr>"
+            + "<tr><td>End date</td><td>" + stormDetails.end + "</td></tr>"
+            + "<tr><td>Category</td><td>" + stormDetails.category + "</td></tr>"
+            + "<tr><td>Max Speed KM/h</td><td>" + stormDetails.maxKM + "</td></tr>"
+            + "<tr><td>Max Speed M/h</td><td>" + stormDetails.maxMPH + "</td></tr>"
+            + "<tr><td>Min MBAR</td><td>" + stormDetails.minMBAR +"</td></tr>"
+            + "<tr><td>Deaths</td><td>"+ stormDetails.deaths + "</td></tr>"
+            + "<tr><td>Damage</td><td>"+ stormDetails.damage + "</td></tr></table>"
+        );
+        var regions = "<h1>Areas Affected</h1>";
+        for (var string in  stormDetails.area){
+            regions += stormDetails.area[string] + "<br />";
+        }
+        $(content).append(regions);
     });
 </script>
 </body>
