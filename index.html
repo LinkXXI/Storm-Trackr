@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.simpleWeather.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
-    <link rel="stylesheet" href="css/stlyes.css" />
+    <link rel="stylesheet" href="css/stlyes.css"/>
 </head>
 <body>
 <div data-role="page" id="home">
@@ -25,16 +26,36 @@
             Much information can be found about past storms under the <i>Reports</i> and <i>Charts</i> menus.
             The tracks of some various storms can be found in the <i>Tracks</i> menu.
             Various settings for the application can be tweaked in the <i>Settings</i> menu.
-         </p>
-        <img alt="hurricane" id="hurricane" src="img/hurricane.png" />
+        </p>
+
+        <img alt="hurricane" id="hurricane" src="img/hurricane.png"/>
+
+        <p id="weather" style="text-align: center;">
+        </p>
         <ul data-role="listview" data-inset="true">
             <li><a href="reports.html" data-ajax="false">Reports</a></li>
             <li><a href="charts.html" data-ajax="false">Charts</a></li>
             <li><a href="tracks.html" data-ajax="false">Tracks</a></li>
-            <li><a href="settings.html" >Settings</a></li>
+            <li><a href="settings.html">Settings</a></li>
         </ul>
     </div>
 </div>
-
+<script>
+    navigator.geolocation.getCurrentPosition((function (location) {
+        "use strict";
+        $.simpleWeather({
+            location: location.coords.latitude + ', ' + location.coords.longitude,
+            units: "C",
+            success: function (weather) {
+                console.log(weather);
+                var html = "<h1>Current Conditions</h1>";
+                html += "<h2><img src='" + weather.thumbnail + "'/>" + weather.alt.temp + '&deg;' + weather.alt.unit + "</h2>";
+                html += weather.city + ", " + weather.region;
+                console.log(html);
+                $("#weather").html(html);
+            }
+        });
+    }));
+</script>
 </body>
 </html>

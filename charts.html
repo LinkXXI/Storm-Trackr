@@ -117,14 +117,15 @@
 <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart"]});
     $(document).on('pageshow', '#stormStrength', function () {
+        "use strict";
         var strongStorms = 0;
         var weakerStorms = 0;
-        for(storm in storms){
+        for(var storm in storms){
             switch(storms[storm].category){
-                case "td":
+                case "TD":
                     weakerStorms++;
                     break;
-                case "ts":
+                case "TS":
                     weakerStorms++;
                     break;
                 case "C1":
@@ -140,6 +141,9 @@
                     strongStorms ++;
                     break;
                 case "C5":
+                    strongStorms ++;
+                    break;
+                case "STS":
                     strongStorms ++;
                     break;
                 default:
@@ -161,6 +165,7 @@
     });
 
     $(document).on('pageshow', '#deathsByCategory', function () {
+        "use strict";
         var td = 0;
         var ts = 0;
         var c1 = 0;
@@ -168,35 +173,38 @@
         var c3 = 0;
         var c4 = 0;
         var c5 = 0;
-        for(storm in storms){
+        for(var storm in storms){
             switch(storms[storm].category){
-                case "td":
-                    td ++;
+                case "TD":
+                    td+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
-                case "ts":
-                    ts ++;
+                case "TS":
+                    ts+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
                 case "C1":
-                    c1 ++;
+                    c1+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
                 case "C2":
-                    c2 ++;
+                    c2+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
                 case "C3":
-                    c3 ++;
+                    c3+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
                 case "C4":
-                    c4 ++;
+                    c4+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
                 case "C5":
-                    c5 ++;
+                    c5+= parseInt(storms[storm].deaths.split(" ")[0]);
+                    break;
+                case "STS":
+                    c2+= parseInt(storms[storm].deaths.split(" ")[0]);
                     break;
                 default:
                     break;
             }
         }
         var data = google.visualization.arrayToDataTable([
-            ['Category', "Number of Storms"],
+            ['Category', "Number of Deaths"],
             ['Tropical Depression' , td],
             ['Tropical Storm' , ts],
             ['Category 1' , c1],
@@ -206,7 +214,7 @@
             ['Category 5' , c5]
         ]);
         var options = {
-            title: "Strong Storms",
+            title: "Number of Deaths by Category of Storm",
             backgroundColor: {fill: "transparent"}
         };
         var chart = new google.visualization.PieChart($("#deathsChart").get(0));

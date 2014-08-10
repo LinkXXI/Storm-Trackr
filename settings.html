@@ -6,12 +6,12 @@
     <meta name="viewport" id="viewport"
           content="width=device-width, height=device-height,
   initial-scale=1.0, maximum-scale=1.0,
-  user-scalable=no" />
+  user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
-    <link rel="stylesheet" href="css/stlyes.css" />
+    <link rel="stylesheet" href="css/stlyes.css"/>
 </head>
 <body>
 <script>checkData();</script>
@@ -31,12 +31,8 @@
             <label for="updateTimeSetting">Update time (minutes)</label>
 
             <div data-role="fieldcontain">
-
                 <input type="range" name="updateTimeSetting" id="updateTimeSetting" min="1" max="120"
                        data-highlight="true"/>
-            </div>
-            <div data-role="fieldcontain">
-                <input type="button" value="Force data refresh now" />
             </div>
         </div>
         <div data-role="footer">
@@ -45,20 +41,26 @@
                     <button type="button" data-rel="back">Cancel</button>
                 </div>
                 <div class="ui-block-b">
-                    <button type="submit">Save</button>
+                    <button type="button" id="save">Save</button>
                 </div>
             </fieldset>
         </div>
     </form>
     <script>
         $(document).on("pagecreate", "#settingsMain", function () {
-            var isDirty = false
+            "use strict";
             $("#lastUpdate").val(lastUpdate);
             var updateTimeSetting = $("#updateTimeSetting").val(updateDiff);
             updateTimeSetting.slider("refresh");
-
         });
-        function forceUpdate(){
+        $("#save").click(function () {
+            "use strict";
+             updateDiff = $("#updateTimeSetting").val();
+            localStorage.setItem("updateDiff", updateDiff);
+            history.back();
+        });
+        function forceUpdate() {
+            "use strict";
             checkData(true);
             $('#lastUpdate').val(lastUpdate);
         }

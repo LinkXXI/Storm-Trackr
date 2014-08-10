@@ -113,7 +113,7 @@
         </ul>
     </div>
     <div data-role="content">
-        <ul data-role="listview" id="stormsByCategoryList" data-autodividers="true">
+        <ul data-role="listview" id="stormsByCategoryList">
 
         </ul>
     </div>
@@ -149,25 +149,14 @@
 
 <script>
     $(document).on('pagecreate', '#stormsByYear', function () {
-        /* var stormList = $("#stormsByYearList").listview({
-         autodividers: "true",
-         autodividersSelector: function (li) {
-         return li.attr("data-year");
-         }
-         });
-         var listString = "";
-         storms.forEach(function (storm) {
-         //$(stormList).append("<li data-year='" + new Date(storm.start).getFullYear() + "'>" + storm.name + "</li>");
-         listString += "<li data-year='" + new Date(storm.start).getFullYear() + "'>" + storm.name + "</li>"
-         });
-         $(stormList).listview('refresh');*/
+        "use strict";
         var listString = "";
         var stormsYearsArray = [];
         for (var storm in storms) {
             //get the storms year
             var stormYear = storms[storm].start.split("/")[0];
             //check if the ley exists
-            if (stormsYearsArray[stormYear] == undefined) {
+            if (stormsYearsArray[stormYear] === undefined) {
                 stormsYearsArray[stormYear] = [];
             }
             //put the origional index into the storm object for future usage
@@ -182,7 +171,7 @@
             var strongestStorm = "";
             //find the strongest storm
             for (storm in yearsStorms) {
-                var aStorm = yearsStorms[storm]
+                var aStorm = yearsStorms[storm];
                 if (aStorm.maxKM > speed) {
                     speed = aStorm.maxKM;
                     strongestStorm = aStorm.name;
@@ -193,7 +182,7 @@
             //add all the other storms.
             for (storm in yearsStorms) {
                 var aStorm = yearsStorms[storm];
-                listString += "<li><a href='' data-index='" + aStorm.origIndex + "'>" + aStorm.name + "</a></li>"
+                listString += "<li><a href='' data-index='" + aStorm.origIndex + "'>" + aStorm.name + "</a></li>";
             }
         }
         $("#stormsByYearList").append(listString).listview("refresh");
@@ -204,35 +193,54 @@
     });
 
     $(document).on('pagecreate', '#stormsByCategory', function () {
-        var stormList = $("#stormsByCategoryList").listview({
-            autodividers: "true",
-            autodividersSelector: function (li) {
-                console.log(li.attr("data-category"));
-                return li.attr("data-category").trim();
+        "use strict";
+        var categoryArray = [];
+        categoryArray.TD = [];
+        categoryArray.TS = [];
+        categoryArray.C1 = [];
+        categoryArray.STS = [];
+        categoryArray.C2 = [];
+        categoryArray.C3 = [];
+        categoryArray.C4 = [];
+        categoryArray.C5 = [];
+        var i = 0;
+        for (var storm in storms) {
+            storms[storm].origIndex = i;
+            categoryArray[storms[storm].category].push(storms[storm]);
+            i++;
+        }
+        var listString = "";
+        for (var key in categoryArray) {
+            listString += "<li data-role='list-divider'>Category: " + key + "</li>";
+            for (storm in categoryArray[key]) {
+                var aStorm = categoryArray[key][storm];
+                listString += "<li><a href='' data-index='" + aStorm.origIndex + "'>" + aStorm.name + "</a></li>";
             }
-        })
-        storms.forEach(function (storm) {
-            $(stormList).append("<li data-category='" + storm.category + "'>" + storm.name + "</li>");
+        }
+        $("#stormsByCategoryList").append(listString).listview('refresh');
+        $(this).on('vclick', 'ul li a', function () {
+            window.stormDetails = storms[$(this).attr('data-index')];
+            $.mobile.changePage("#stormDetails");
         });
-        $(stormList).listview('refresh');
     });
 
     $(document).on('pagebeforeshow', '#stormDetails', function () {
+        "use strict";
         var content = $(this).find("[data-role='content']").html("");
         $(content).append(
-            "<h1>" + stormDetails.name + "</h1>"
-            + "<Table>"
-            + "<tr><td>Start date</td><td>" + stormDetails.start + "</td></tr>"
-            + "<tr><td>End date</td><td>" + stormDetails.end + "</td></tr>"
-            + "<tr><td>Category</td><td>" + stormDetails.category + "</td></tr>"
-            + "<tr><td>Max Speed KM/h</td><td>" + stormDetails.maxKM + "</td></tr>"
-            + "<tr><td>Max Speed M/h</td><td>" + stormDetails.maxMPH + "</td></tr>"
-            + "<tr><td>Min MBAR</td><td>" + stormDetails.minMBAR +"</td></tr>"
-            + "<tr><td>Deaths</td><td>"+ stormDetails.deaths + "</td></tr>"
-            + "<tr><td>Damage</td><td>"+ stormDetails.damage + "</td></tr></table>"
+                        "<h1>" + stormDetails.name + "</h1>" +
+                        "<Table>" +
+                        "<tr><td>Start date</td><td>" + stormDetails.start + "</td></tr>" +
+                        "<tr><td>End date</td><td>" + stormDetails.end + "</td></tr>" +
+                        "<tr><td>Category</td><td>" + stormDetails.category + "</td></tr>" +
+                        "<tr><td>Max Speed KM/h</td><td>" + stormDetails.maxKM + "</td></tr>" +
+                        "<tr><td>Max Speed M/h</td><td>" + stormDetails.maxMPH + "</td></tr>" +
+                        "<tr><td>Min MBAR</td><td>" + stormDetails.minMBAR + "</td></tr>" +
+                        "<tr><td>Deaths</td><td>" + stormDetails.deaths + "</td></tr>" +
+                        "<tr><td>Damage</td><td>" + stormDetails.damage + "</td></tr></table>"
         );
         var regions = "<h1>Areas Affected</h1>";
-        for (var string in  stormDetails.area){
+        for (var string in  stormDetails.area) {
             regions += stormDetails.area[string] + "<br />";
         }
         $(content).append(regions);

@@ -93,34 +93,39 @@
     var hurricanePath;
 
     $(document).on("pagecreate", "#tracksMain", function () {
+        "use strict";
         var tracksList = $("#tracksList");
         var append = "";
         $.each(tracks, function (i, track) {
             append += "<li><a href='#mapPage' data-id='" + i + "'>" + track.name + "</a></li>";
-        })
+        });
         $(tracksList).append(append);
         tracksList.listview("refresh");
     });
 
     $(document).on("pageinit", "#mapPage", function () {
+        "use strict";
         function init(){
             var mapOptions = {
                 center: new google.maps.LatLng(30, -67),
                 zoom: 4
-            }
+            };
             map = new google.maps.Map(document.getElementById("hurricaneMap"), mapOptions);
         }
         setTimeout(init, 300);
     });
 
     $(document).on("pagebeforehide", '#mapPage', function () {
+        "use strict";
         for(var i = 0; i < markers.length; i++){
             markers[i].setMap(null);
         }
+        markers = [];
         hurricanePath.setMap(null);
     });
 
     $(document).on("vclick", '#tracksList li a', function () {
+        "use strict";
         var track = tracks[$(this).attr('data-id')];
         function placeMarkers() {
             $('#nameTarget').html(' ' + track.name);
