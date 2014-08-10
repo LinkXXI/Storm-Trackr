@@ -11,6 +11,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
+    <link rel="stylesheet" href="css/stlyes.css" />
 </head>
 <body>
 <script>checkData();</script>
@@ -26,6 +27,7 @@
 
             <label for="lastUpdate">Last Update</label>
             <input type="text" id="lastUpdate" disabled/>
+            <button type="button" onclick="forceUpdate()">Force update now!</button>
             <label for="updateTimeSetting">Update time (minutes)</label>
 
             <div data-role="fieldcontain">
@@ -56,6 +58,10 @@
             updateTimeSetting.slider("refresh");
 
         });
+        function forceUpdate(){
+            checkData(true);
+            $('#lastUpdate').val(lastUpdate);
+        }
     </script>
 </div>
 </body>

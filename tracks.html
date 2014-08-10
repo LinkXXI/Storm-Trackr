@@ -6,35 +6,22 @@
     <meta name="viewport" id="viewport"
           content="width=device-width, height=device-height,
   initial-scale=1.0, maximum-scale=1.0,
-  user-scalable=no" />
+  user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDez5ZF6K_UOr8izzd4PkXyWpAzG1dwTJQ"></script>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDez5ZF6K_UOr8izzd4PkXyWpAzG1dwTJQ"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
+    <link rel="stylesheet" href="css/stlyes.css" />
     <style>
-        #mapPage{
-            height: 0;
-        }
-        #hurricaneMap {
-            height: 100%;
-            padding: 0;
-            text-shadow: none;
-        }
+
     </style>
 </head>
 <body>
 <script>
     checkData()
-    $(document).on("pageinit", "#tracksMain", function () {
-        var tracksList = $("#tracksList");
-        var append = "";
-        $.each(tracks, function (i, track) {
-            append += "<li><a href='#mapPage' data-id='" + i + "'>" + track.name + "</a></li>";
-        })
-        $(tracksList).append(append);
-        tracksList.listview("refresh");
-    });
+
 </script>
 <div data-role="page" id="tracksMain">
     <div data-role="header">
@@ -50,10 +37,10 @@
                     <a href="index.html">Home</a>
                 </li>
                 <li>
-                    <a href="reports.html">Reports</a>
+                    <a href="reports.html" data-ajax="false">Reports</a>
                 </li>
                 <li>
-                    <a href="charts.html">Charts</a>
+                    <a href="charts.html" data-ajax="false">Charts</a>
                 </li>
                 <li>
                     <a href="#tracksMain" class="ui-btn-active ui-state-persist">Tracks</a>
@@ -81,10 +68,10 @@
                     <a href="index.html">Home</a>
                 </li>
                 <li>
-                    <a href="reports.html">Reports</a>
+                    <a href="reports.html" data-ajax="false">Reports</a>
                 </li>
                 <li>
-                    <a href="charts.html">Charts</a>
+                    <a href="charts.html" data-ajax="false">Charts</a>
                 </li>
                 <li>
                     <a href="#tracksMain" class="ui-btn-active ui-state-persist">Tracks</a>
@@ -101,20 +88,98 @@
 </div>
 
 <script>
-    $(document).ready(function (){
+    var map;
+    var markers = [];
+    var hurricanePath;
 
+    $(document).on("pagecreate", "#tracksMain", function () {
+        var tracksList = $("#tracksList");
+        var append = "";
+        $.each(tracks, function (i, track) {
+            append += "<li><a href='#mapPage' data-id='" + i + "'>" + track.name + "</a></li>";
+        })
+        $(tracksList).append(append);
+        tracksList.listview("refresh");
     });
-    $(document).on("pageinit", "#mapPage", function(){
-        console.log(typeof map === 'undefined')
-        if(typeof map === 'undefined'){
+
+    $(document).on("pageinit", "#mapPage", function () {
+        function init(){
             var mapOptions = {
                 center: new google.maps.LatLng(30, -67),
-                zoom : 4
+                zoom: 4
             }
-            window.map = new google.maps.Map(document.getElementById("hurricaneMap"),mapOptions);
+            map = new google.maps.Map(document.getElementById("hurricaneMap"), mapOptions);
         }
+        setTimeout(init, 300);
     });
 
+    $(document).on("pagebeforehide", '#mapPage', function () {
+        for(var i = 0; i < markers.length; i++){
+            markers[i].setMap(null);
+        }
+        hurricanePath.setMap(null);
+    });
+
+    $(document).on("vclick", '#tracksList li a', function () {
+        var track = tracks[$(this).attr('data-id')];
+        function placeMarkers() {
+            $('#nameTarget').html(' ' + track.name);
+            var path = [];
+            track.event.forEach(function(event){
+                var latLng = new google.maps.LatLng(event.lat, event.long * - 1);
+                path.push(latLng);
+                var marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    title: event.date.toString() + event.time.toString(),
+                    animation: google.maps.Animation.DROP
+                });
+                markers.push(marker);
+
+                var contentString = "<div id='content'>" +
+                "<h3>"+event.date +" " + event.time +"h</h3>" +
+                "<p>Stage: " + event.stage + "</p>" +
+                "<p>Mbar: " + event.mbar + "</p>" +
+                "<p>Windspeed: " + event.windspeed + "</p>" +
+                "</div>";
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString,
+                    closed: true
+                });
+
+                google.maps.event.addListener(marker, 'click', function(){
+                    if(infowindow.closed) {
+                        infowindow.open(map, marker);
+                        infowindow.closed = false;
+                    }
+                    else{
+                        infowindow.close();
+                        infowindow.closed = true;
+                    }
+                });
+            });
+            var lineSymbol =    {
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+            };
+            hurricanePath = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: '#000000',
+                strokeOpacity: 0.75,
+                stokeWeight: 2,
+                icons:[{
+                    icon:lineSymbol,
+                    offset: '100%'
+                }],
+                map:map
+            });
+            //hurricanePath.setMap(map);
+        }
+
+        setTimeout(placeMarkers, 500);
+
+    });
 </script>
 </body>
 </html>

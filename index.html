@@ -11,14 +11,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
-    <style>
-        .mainContent {
-            /* background-image: url('hurricane.png');
-             background-position: center;
-             background-repeat: no-repeat;
-             background-attachment: fixed;*/
-        }
-    </style>
+    <link rel="stylesheet" href="css/stlyes.css" />
 </head>
 <body>
 <div data-role="page" id="home">
@@ -26,13 +19,19 @@
     <div data-role="header">
         <h1>Storm Trackr</h1>
     </div>
-    <div data-role="content" class="mainContent">
-        <p>Welcome to Storm Trakr, you're one stop shop for all the hurricane tracking information you need!</p>
+    <div data-role="content" id="mainContent">
+        <p>
+            Welcome to Storm Trakr, you're one stop shop for all the hurricane tracking information you need!
+            Much information can be found about past storms under the <i>Reports</i> and <i>Charts</i> menus.
+            The tracks of some various storms can be found in the <i>Tracks</i> menu.
+            Various settings for the application can be tweaked in the <i>Settings</i> menu.
+         </p>
+        <img alt="hurricane" id="hurricane" src="img/hurricane.png" />
         <ul data-role="listview" data-inset="true">
-            <li><a href="reports.html" rel="external">Reports</a></li>
-            <li><a href="charts.html" rel="external">Charts</a></li>
-            <li><a href="tracks.html" rel="external">Tracks</a></li>
-            <li><a href="settings.html" rel="external">Settings</a></li>
+            <li><a href="reports.html" data-ajax="false">Reports</a></li>
+            <li><a href="charts.html" data-ajax="false">Charts</a></li>
+            <li><a href="tracks.html" data-ajax="false">Tracks</a></li>
+            <li><a href="settings.html" >Settings</a></li>
         </ul>
     </div>
 </div>

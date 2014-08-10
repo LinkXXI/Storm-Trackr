@@ -12,6 +12,7 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
+    <link rel="stylesheet" href="css/stlyes.css" />
 </head>
 <body>
 <div data-role="page" id="main">
@@ -34,10 +35,10 @@
                     <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
                 </li>
                 <li>
-                    <a href="">Charts</a>
+                    <a href="charts.html" data-ajax="false">Charts</a>
                 </li>
                 <li>
-                    <a href="">Tracks</a>
+                    <a href="tracks.html" data-ajax="false">Tracks</a>
                 </li>
             </ul>
         </div>
@@ -62,7 +63,7 @@
         <a href="#" data-icon="back" data-rel="back">Back</a>
 
         <h1>Storms by Year</h1>
-        <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
+        <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
 
         <div data-role="navbar">
             <ul>
@@ -73,10 +74,10 @@
                     <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
                 </li>
                 <li>
-                    <a href="">Charts</a>
+                    <a href="charts.html" data-ajax="false">Charts</a>
                 </li>
                 <li>
-                    <a href="">Tracks</a>
+                    <a href="tracks.html" data-ajax="false">Tracks</a>
                 </li>
             </ul>
         </div>
@@ -93,7 +94,7 @@
         <a href="#" data-icon="back" data-rel="back">Back</a>
 
         <h1>Storms by Category</h1>
-        <a href="#" data-icon="gear" class="ui-btn-right">Options</a>
+        <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
     </div>
     <div data-role="navbar">
         <ul>
@@ -104,10 +105,10 @@
                 <a href="#main" class="ui-btn-active ui-state-persist">Reports</a>
             </li>
             <li>
-                <a href="charts.html">Charts</a>
+                <a href="charts.html" data-ajax="false">Charts</a>
             </li>
             <li>
-                <a href="tracks.html">Tracks</a>
+                <a href="tracks.html" data-ajax="false">Tracks</a>
             </li>
         </ul>
     </div>
@@ -135,7 +136,7 @@
         var stormList = $("#stormsByCategoryList").listview({
             autodividers: "true",
             autodividersSelector: function (li) {
-                return li.attr("data-category");
+                return li.attr("data-category").trim();
             }
         });
         storms.forEach(function (storm) {

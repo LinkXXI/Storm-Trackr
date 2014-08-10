@@ -1,0 +1,28 @@
+#home{
+    height: 0;
+}
+#mainContent {
+    height: 100%;
+    padding: 0;
+    text-shadow: none;
+}
+#hurricane {
+    height: 200px;
+    width: auto;
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+p{
+    padding: 10px;
+    text-align: justify;
+}
+#mapPage {
+    height: 0;
+}
+
+#hurricaneMap {
+    height: 100%;
+    padding: 0;
+    text-shadow: none;
+}

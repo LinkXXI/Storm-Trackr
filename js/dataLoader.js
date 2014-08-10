@@ -20,8 +20,10 @@ function getNextUpdate(currentDateTime, minutes) {
 function setUpdateDates() {
     var date = new Date();
     localStorage.setItem("lastUpdate", date);
+    lastUpdate = date;
     var nextDate = getNextUpdate(date, updateDiff);
     localStorage.setItem("nextUpdate", nextDate);
+    nextUpdate = nextDate;
 }
 
 function stormLoad(data) {
@@ -56,7 +58,6 @@ function loadData() {
 }
 
 function checkData(forceLoad) {
-    console.log("checkData() called");
     if (lastUpdate === null) {
         loadData();
         setUpdateDates();
