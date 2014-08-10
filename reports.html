@@ -136,9 +136,10 @@
         var stormList = $("#stormsByCategoryList").listview({
             autodividers: "true",
             autodividersSelector: function (li) {
+                console.log(li.attr("data-category"));
                 return li.attr("data-category").trim();
             }
-        });
+        })
         storms.forEach(function (storm) {
             $(stormList).append("<li data-category='" + storm.category + "'>" + storm.name + "</li>");
         });

@@ -6,12 +6,13 @@
     <meta name="viewport" id="viewport"
           content="width=device-width, height=device-height,
   initial-scale=1.0, maximum-scale=1.0,
-  user-scalable=no" />
+  user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
     <script type="text/javascript" src="js/dataLoader.js"></script>
-    <link rel="stylesheet" href="css/stlyes.css" />
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <link rel="stylesheet" href="css/stlyes.css"/>
 </head>
 <body>
 <script>checkData()</script>
@@ -32,7 +33,7 @@
                     <a href="reports.html" data-ajax="false">Reports</a>
                 </li>
                 <li>
-                    <a href="#chartsMain"class="ui-btn-active ui-state-persist">Charts</a>
+                    <a href="#chartsMain" class="ui-btn-active ui-state-persist">Charts</a>
                 </li>
                 <li>
                     <a href="tracks.html" data-ajax="false">Tracks</a>
@@ -42,11 +43,168 @@
     </div>
     <div data-role="content">
         <ul data-role="listview">
-            <li>Storm strength chart</li>
-            <li>Number of storms per year</li>
+            <li><a href="#stormStrength">Number of Strong Storms</a></li>
+            <li><a href="#deathsByCategory">Deaths by Storm Category</a></li>
 
         </ul>
     </div>
 </div>
+
+<div data-role="page" id="stormStrength">
+    <div data-role="header">
+        <div data-role="header">
+            <a href="#" data-icon="back" data-rel="back">Back</a>
+
+            <h1>Charts</h1>
+            <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
+        </div>
+        <div data-role="navbar">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="reports.html" data-ajax="false">Reports</a>
+                </li>
+                <li>
+                    <a href="#chartsMain" class="ui-btn-active ui-state-persist">Charts</a>
+                </li>
+                <li>
+                    <a href="tracks.html" data-ajax="false">Tracks</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content">
+        <div id="strengthChart" style="height:400px; width: 100%;">
+
+        </div>
+    </div>
+</div>
+
+<div data-role="page" id="deathsByCategory">
+    <div data-role="header">
+        <div data-role="header">
+            <a href="#" data-icon="back" data-rel="back">Back</a>
+
+            <h1>Charts</h1>
+            <a href="settings.html" data-icon="gear" class="ui-btn-right">Settings</a>
+        </div>
+        <div data-role="navbar">
+            <ul>
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+                <li>
+                    <a href="reports.html" data-ajax="false">Reports</a>
+                </li>
+                <li>
+                    <a href="#chartsMain" class="ui-btn-active ui-state-persist">Charts</a>
+                </li>
+                <li>
+                    <a href="tracks.html" data-ajax="false">Tracks</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="content">
+        <div id="deathsChart" style="height:400px;">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    $(document).on('pageshow', '#stormStrength', function () {
+        var c3 = 0;
+        var c4 = 0;
+        var c5 = 0;
+        for(storm in storms){
+            switch(storms[storm].category){
+                case "C3":
+                    c3 ++;
+                    break;
+                case "C4":
+                    c4 ++;
+                    break;
+                case "C5":
+                    c5 ++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        var data = google.visualization.arrayToDataTable([
+           ['Category', "Number of Storms"],
+           ['C3' , c3],//innerData[0]],
+           ['C4' , c4],//innerData[1]],
+           ['C5' , c5]//innerData[2]]
+        ]);
+        var options = {
+            title: "Strong Storms",
+            backgroundColor: {fill: "transparent"}
+        };
+        var chart = new google.visualization.PieChart($("#strengthChart").get(0));
+        chart.draw(data, options);
+    });
+
+    $(document).on('pageshow', '#deathsByCategory', function () {
+        var td = 0;
+        var ts = 0;
+        var c1 = 0;
+        var c2 = 0;
+        var c3 = 0;
+        var c4 = 0;
+        var c5 = 0;
+        for(storm in storms){
+            switch(storms[storm].category){
+                case "td":
+                    td ++;
+                    break;
+                case "ts":
+                    ts ++;
+                    break;
+                case "C1":
+                    c1 ++;
+                    break;
+                case "C2":
+                    c2 ++;
+                    break;
+                case "C3":
+                    c3 ++;
+                    break;
+                case "C4":
+                    c4 ++;
+                    break;
+                case "C5":
+                    c5 ++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        var data = google.visualization.arrayToDataTable([
+            ['Category', "Number of Storms"],
+            ['Tropical Depression' , td],
+            ['Tropical Storm' , ts],
+            ['Category 1' , c1],
+            ['Category 2' , c2],
+            ['Category 3' , c3],
+            ['Category 4' , c4],
+            ['Category 5' , c5]
+        ]);
+        var options = {
+            title: "Strong Storms",
+            backgroundColor: {fill: "transparent"}
+        };
+        var chart = new google.visualization.PieChart($("#deathsChart").get(0));
+        $(window).resize(function () {
+            chart.draw(data, options);
+        });
+        chart.draw(data, options);
+    });
+
+</script>
 </body>
 </html>
