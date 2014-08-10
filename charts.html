@@ -43,7 +43,7 @@
     </div>
     <div data-role="content">
         <ul data-role="listview">
-            <li><a href="#stormStrength">Number of Strong Storms</a></li>
+            <li><a href="#stormStrength">Storm Comparison</a></li>
             <li><a href="#deathsByCategory">Deaths by Storm Category</a></li>
 
         </ul>
@@ -117,35 +117,46 @@
 <script type="text/javascript">
     google.load("visualization", "1", {packages:["corechart"]});
     $(document).on('pageshow', '#stormStrength', function () {
-        var c3 = 0;
-        var c4 = 0;
-        var c5 = 0;
+        var strongStorms = 0;
+        var weakerStorms = 0;
         for(storm in storms){
             switch(storms[storm].category){
+                case "td":
+                    weakerStorms++;
+                    break;
+                case "ts":
+                    weakerStorms++;
+                    break;
+                case "C1":
+                    weakerStorms++;
+                    break;
+                case "C2":
+                    weakerStorms ++;
+                    break;
                 case "C3":
-                    c3 ++;
+                   strongStorms ++;
                     break;
                 case "C4":
-                    c4 ++;
+                    strongStorms ++;
                     break;
                 case "C5":
-                    c5 ++;
+                    strongStorms ++;
                     break;
                 default:
                     break;
             }
         }
         var data = google.visualization.arrayToDataTable([
-           ['Category', "Number of Storms"],
-           ['C3' , c3],//innerData[0]],
-           ['C4' , c4],//innerData[1]],
-           ['C5' , c5]//innerData[2]]
+           ['blank','Severe Storms (C3 and up)','Weak Storms (Under C3)','Total Storms'   ],//, "Number of Storms"],
+           ['' , strongStorms, weakerStorms, storms.length],
+           //'Weak Storms (Under C3)' , weakerStorms],
+           //['Total Storms' , storms.length]
         ]);
         var options = {
-            title: "Strong Storms",
+            vAxis:{title: "# Storms"},
             backgroundColor: {fill: "transparent"}
         };
-        var chart = new google.visualization.PieChart($("#strengthChart").get(0));
+        var chart = new google.visualization.BarChart($("#strengthChart").get(0));
         chart.draw(data, options);
     });
 
