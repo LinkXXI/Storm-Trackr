@@ -88,6 +88,11 @@
 </div>
 
 <script>
+    $(document).bind('pageinit', function () {
+        $( "[data-role='page']" ).removeClass( "ui-page-theme-a ui-page-theme-b ui-page-theme-c" ).addClass( "ui-page-theme-" + theme);
+    });
+</script>
+<script>
     var map;
     var markers = [];
     var hurricanePath;

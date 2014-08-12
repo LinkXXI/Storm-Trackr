@@ -4,6 +4,7 @@
 var lastUpdate = localStorage.getItem("lastUpdate");
 var nextUpdate = localStorage.getItem("nextUpdate");
 var updateDiff = localStorage.getItem("updateDiff");
+var theme = localStorage.theme;
 
 if (updateDiff === null) {
     "use strict";
@@ -13,6 +14,10 @@ if (updateDiff === null) {
 if (nextUpdate === null) {
     "use strict";
     localStorage.setItem("nextUpdate", getNextUpdate(new Date(), 1));
+}
+
+if (theme === undefined){
+    localStorage.theme = "a";
 }
 
 function getNextUpdate(currentDateTime, minutes) {

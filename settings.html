@@ -8,13 +8,9 @@
   initial-scale=1.0, maximum-scale=1.0,
   user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-    <script type="text/javascript" src="js/dataLoader.js"></script>
     <link rel="stylesheet" href="css/stlyes.css"/>
 </head>
 <body>
-<script>checkData();</script>
 <div data-role="page" id="settingsMain">
     <div data-role="header">
         <a href="#" data-icon="back" data-rel="back">Back</a>
@@ -34,11 +30,20 @@
                 <input type="range" name="updateTimeSetting" id="updateTimeSetting" min="1" max="120"
                        data-highlight="true"/>
             </div>
+            <hr/>
+            <h4>Theme</h4>
+
+            <div data-role="fieldcontain">
+                <select id="theme">
+                    <option value="Light">Light</option>
+                    <option value="Dark">Dark</option>
+                </select>
+            </div>
         </div>
         <div data-role="footer">
             <fieldset class="ui-grid-a">
                 <div class="ui-block-a">
-                    <button type="button" data-rel="back">Cancel</button>
+                    <button type="button" id="cancel">Cancel</button>
                 </div>
                 <div class="ui-block-b">
                     <button type="button" id="save">Save</button>
@@ -46,17 +51,74 @@
             </fieldset>
         </div>
     </form>
+    <!-- scripts need to be included here so settings will work when loaded externally -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script type="text/javascript" src="js/dataLoader.js"></script>
+    <script>checkData();</script>
     <script>
+        $(document).bind('pageinit', function () {
+            $("[data-role='page']").removeClass("ui-page-theme-a ui-page-theme-b ui-page-theme-c").addClass("ui-page-theme-" + theme);
+        });
+    </script>
+    <script>
+        var tempTheme = theme;
         $(document).on("pagecreate", "#settingsMain", function () {
             "use strict";
             $("#lastUpdate").val(lastUpdate);
             var updateTimeSetting = $("#updateTimeSetting").val(updateDiff);
             updateTimeSetting.slider("refresh");
+            switch (theme) {
+                case "a":
+                    $("#theme").val("Light").selectmenu("refresh")
+                    break;
+                case "b":
+                    $("#theme").val("Dark").selectmenu("refresh")
+                    break;
+                default:
+                    $("#theme").val("Light").selectmenu("refresh")
+                    break;
+            }
         });
+
+        $("#theme").change(function () {
+            "use strict";
+            switch ($("#theme").val()) {
+                case "Light":
+                    tempTheme = "a";
+                    break;
+                case "Dark":
+                    tempTheme = "b";
+                    break;
+                default:
+                    tempTheme = "a";
+                    break;
+            }
+            $("[data-role='page']").removeClass("ui-page-theme-a ui-page-theme-b ui-page-theme-c").addClass("ui-page-theme-" + tempTheme);
+        })
         $("#save").click(function () {
             "use strict";
-             updateDiff = $("#updateTimeSetting").val();
+            updateDiff = $("#updateTimeSetting").val();
             localStorage.setItem("updateDiff", updateDiff);
+
+            var newTheme = "";
+            switch ($("#theme").val()) {
+                case "Light":
+                    newTheme = "a";
+                    break;
+                case "Dark":
+                    newTheme = "b";
+                    break;
+                default:
+                    newTheme = "a";
+                    break;
+            }
+            theme = newTheme;
+            localStorage.theme = newTheme;
+            history.back();
+        });
+        $("#cancel").click(function () {
+            "use strict";
             history.back();
         });
         function forceUpdate() {
@@ -66,5 +128,7 @@
         }
     </script>
 </div>
+
+
 </body>
 </html>

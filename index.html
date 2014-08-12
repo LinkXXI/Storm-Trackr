@@ -8,15 +8,11 @@
   initial-scale=1.0, maximum-scale=1.0,
   user-scalable=no"/>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css"/>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
-    <script type="text/javascript" src="js/jquery.simpleWeather.min.js"></script>
-    <script type="text/javascript" src="js/dataLoader.js"></script>
+
     <link rel="stylesheet" href="css/stlyes.css"/>
 </head>
 <body>
 <div data-role="page" id="home">
-    <script>checkData()</script>
     <div data-role="header">
         <h1>Storm Trackr</h1>
     </div>
@@ -39,23 +35,33 @@
             <li><a href="settings.html">Settings</a></li>
         </ul>
     </div>
-</div>
-<script>
-    navigator.geolocation.getCurrentPosition((function (location) {
-        "use strict";
-        $.simpleWeather({
-            location: location.coords.latitude + ', ' + location.coords.longitude,
-            units: "C",
-            success: function (weather) {
-                console.log(weather);
-                var html = "<h1>Current Conditions</h1>";
-                html += "<h2><img src='" + weather.thumbnail + "'/>" + weather.alt.temp + '&deg;' + weather.alt.unit + "</h2>";
-                html += weather.city + ", " + weather.region;
-                console.log(html);
-                $("#weather").html(html);
-            }
+    <!-- home is loaded externally in some cases so files are included here -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.simpleWeather.min.js"></script>
+    <script type="text/javascript" src="js/dataLoader.js"></script>
+    <script>checkData()</script>
+    <script>
+        $(document).bind('pageinit', function () {
+            $( "[data-role='page']" ).removeClass( "ui-page-theme-a ui-page-theme-b ui-page-theme-c" ).addClass( "ui-page-theme-" + theme);
         });
-    }));
-</script>
+    </script>
+    <script>
+        navigator.geolocation.getCurrentPosition((function (location) {
+            "use strict";
+            $.simpleWeather({
+                location: location.coords.latitude + ', ' + location.coords.longitude,
+                units: "C",
+                success: function (weather) {
+                    var html = "<h1>Current Conditions</h1>";
+                    html += "<h2><img src='" + weather.thumbnail + "'/>" + weather.alt.temp + '&deg;' + weather.alt.unit + "</h2>";
+                    $("#weather").html(html);
+                }
+            });
+        }));
+    </script>
+</div>
+
+
 </body>
 </html>
