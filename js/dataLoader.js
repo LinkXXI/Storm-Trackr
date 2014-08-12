@@ -17,7 +17,9 @@ if (nextUpdate === null) {
 }
 
 if (theme === undefined){
+    "use strict";
     localStorage.theme = "a";
+    theme = "a";
 }
 
 function getNextUpdate(currentDateTime, minutes) {

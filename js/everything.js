@@ -412,17 +412,63 @@ $(document).on("vclick", '#tracksList li a', function () {
 
 
 // SETTINGS PAGE JS
+var tempTheme = theme;
 $(document).on("pagecreate", "#settingsMain", function () {
     "use strict";
-    var isDirty = false;
     $("#lastUpdate").val(lastUpdate);
     var updateTimeSetting = $("#updateTimeSetting").val(updateDiff);
     updateTimeSetting.slider("refresh");
+    switch (theme) {
+        case "a":
+            $("#theme").val("Light").selectmenu("refresh");
+            break;
+        case "b":
+            $("#theme").val("Dark").selectmenu("refresh");
+            break;
+        default:
+            $("#theme").val("Light").selectmenu("refresh");
+            break;
+    }
+});
+
+$("#theme").change(function () {
+    "use strict";
+    switch ($("#theme").val()) {
+        case "Light":
+            tempTheme = "a";
+            break;
+        case "Dark":
+            tempTheme = "b";
+            break;
+        default:
+            tempTheme = "a";
+            break;
+    }
+    $("[data-role='page']").removeClass("ui-page-theme-a ui-page-theme-b ui-page-theme-c").addClass("ui-page-theme-" + tempTheme);
 });
 $("#save").click(function () {
     "use strict";
     updateDiff = $("#updateTimeSetting").val();
     localStorage.setItem("updateDiff", updateDiff);
+
+    var newTheme = "";
+    switch ($("#theme").val()) {
+        case "Light":
+            newTheme = "a";
+            break;
+        case "Dark":
+            newTheme = "b";
+            break;
+        default:
+            newTheme = "a";
+            break;
+    }
+    theme = newTheme;
+    localStorage.theme = newTheme;
+    history.back();
+});
+$("#cancel").click(function () {
+    "use strict";
     history.back();
 });
 function forceUpdate() {
@@ -430,4 +476,3 @@ function forceUpdate() {
     checkData(true);
     $('#lastUpdate').val(lastUpdate);
 }
-
